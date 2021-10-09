@@ -21,4 +21,4 @@ import { PostsModule } from './posts/posts.module';
     controllers: [],
     providers: [PostsService],
 })
-export class AppModule { }
+export class AppModule {}

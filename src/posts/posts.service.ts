@@ -8,7 +8,7 @@ import { PrismaError } from '../utils/prismaError';
 
 @Injectable()
 export class PostsService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService) {}
 
     // Get a single post
     async post(id: string): Promise<Post | null> {
@@ -18,9 +18,8 @@ export class PostsService {
             },
         });
 
-        if (!post) {
-            throw new PostNotFoundException(parseInt(id));
-        }
+        if (!post) throw new PostNotFoundException(parseInt(id));
+
         return post;
     }
 

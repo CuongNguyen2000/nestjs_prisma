@@ -1,10 +1,10 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { PostsService } from './posts.service';
-import { Post, NewPost, UpdatePost } from 'src/graphql';
+import { NewPost, UpdatePost } from 'src/graphql';
 
 @Resolver('Post')
 export class PostResolvers {
-    constructor(private readonly postService: PostsService) { }
+    constructor(private readonly postService: PostsService) {}
 
     @Query('posts')
     async posts() {
