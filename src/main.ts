@@ -9,7 +9,7 @@ async function bootstrap() {
     const logger: LoggerService = new LoggerService();
 
     app.enableCors();
-    // logger.verbose(`Database URI => ${configService.get('database.uri')}`);
+    logger.verbose(`Database URL => ${configService.get('database.URL')}`);
     logger.verbose(`Application listening on port => ${process.env.PORT}`);
     await app.listen(process.env.PORT);
 }
