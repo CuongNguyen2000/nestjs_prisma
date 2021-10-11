@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e62ef513-ad33-4a8c-931e-b579d5d5c477",
+		"_postman_id": "78799a50-7de8-4251-8b02-1dd409e7be8a",
 		"name": "nestjs_prisma_graphql",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -9,6 +9,48 @@
 			"name": "mutations",
 			"item": [
 				{
+					"name": "createUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createUser ($input: NewUser) {\n    createUser (input: $input) {\n        id\n        email\n        name\n        posts {\n            id\n            author {\n                id\n                email\n                name\n                posts {\n                    id\n                    title\n                    content\n                    createdAt\n                }\n                createdAt\n            }\n            title\n            content\n            createdAt\n        }\n        createdAt\n    }\n}",
+								"variables": "{\n  \"input\": {\n    \"email\": \"\",\n    \"name\": \"\",\n    \"posts\": [\n      0\n    ]\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation deleteUser ($id: ID!) {\n    deleteUser (id: $id) {\n        id\n        email\n        name\n        posts {\n            id\n            author {\n                id\n                email\n                name\n                posts {\n                    id\n                    title\n                    content\n                    createdAt\n                }\n                createdAt\n            }\n            title\n            content\n            createdAt\n        }\n        createdAt\n    }\n}",
+								"variables": "{\n  \"id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "createPost",
 					"request": {
 						"method": "POST",
@@ -16,17 +58,14 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation createPost ($input: NewPost) {\n    createPost (input: $input) {\n        id\n        title\n        content\n        createdAt\n    }\n}",
-								"variables": "{\n  \"input\": {\n    \"title\": \"\",\n    \"content\": \"\"\n  }\n}"
+								"query": "mutation createPost ($input: NewPost) {\n    createPost (input: $input) {\n        id\n        author {\n            id\n            email\n            name\n            posts {\n                id\n                author {\n                    id\n                    email\n                    name\n                    createdAt\n                }\n                title\n                content\n                createdAt\n            }\n            createdAt\n        }\n        title\n        content\n        createdAt\n    }\n}",
+								"variables": "{\n  \"input\": {\n    \"author\": 0,\n    \"title\": \"\",\n    \"content\": \"\"\n  }\n}"
 							}
 						},
 						"url": {
-							"raw": "{{url}}/graphql",
+							"raw": "{{url}}",
 							"host": [
 								"{{url}}"
-							],
-							"path": [
-								"graphql"
 							]
 						}
 					},
@@ -40,17 +79,14 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation updatePost ($input: UpdatePost) {\n    updatePost (input: $input) {\n        id\n        title\n        content\n        createdAt\n    }\n}",
+								"query": "mutation updatePost ($input: UpdatePost) {\n    updatePost (input: $input) {\n        id\n        author {\n            id\n            email\n            name\n            posts {\n                id\n                author {\n                    id\n                    email\n                    name\n                    createdAt\n                }\n                title\n                content\n                createdAt\n            }\n            createdAt\n        }\n        title\n        content\n        createdAt\n    }\n}",
 								"variables": "{\n  \"input\": {\n    \"id\": 0,\n    \"title\": \"\",\n    \"content\": \"\"\n  }\n}"
 							}
 						},
 						"url": {
-							"raw": "{{url}}/graphql",
+							"raw": "{{url}}",
 							"host": [
 								"{{url}}"
-							],
-							"path": [
-								"graphql"
 							]
 						}
 					},
@@ -64,17 +100,14 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation deletePost ($id: ID!) {\n    deletePost (id: $id) {\n        id\n        title\n        content\n        createdAt\n    }\n}",
+								"query": "mutation deletePost ($id: ID!) {\n    deletePost (id: $id) {\n        id\n        author {\n            id\n            email\n            name\n            posts {\n                id\n                author {\n                    id\n                    email\n                    name\n                    createdAt\n                }\n                title\n                content\n                createdAt\n            }\n            createdAt\n        }\n        title\n        content\n        createdAt\n    }\n}",
 								"variables": "{\n  \"id\": 0\n}"
 							}
 						},
 						"url": {
-							"raw": "{{url}}/graphql",
+							"raw": "{{url}}",
 							"host": [
 								"{{url}}"
-							],
-							"path": [
-								"graphql"
 							]
 						}
 					},
@@ -93,17 +126,14 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query posts {\n    posts {\n        id\n        title\n        content\n        createdAt\n    }\n}",
+								"query": "query posts {\n    posts {\n        id\n        author {\n            id\n            email\n            name\n            posts {\n                id\n                title\n                content\n                createdAt\n            }\n            createdAt\n        }\n        title\n        content\n        createdAt\n    }\n}",
 								"variables": "{}"
 							}
 						},
 						"url": {
-							"raw": "{{url}}/graphql",
+							"raw": "{{url}}",
 							"host": [
 								"{{url}}"
-							],
-							"path": [
-								"graphql"
 							]
 						}
 					},
@@ -117,17 +147,56 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query post ($id: ID!) {\n    post (id: $id) {\n        id\n        title\n        content\n        createdAt\n    }\n}",
-								"variables": "{\n  \"id\": 1\n}"
+								"query": "query post ($id: ID!) {\n    post (id: $id) {\n        id\n        author {\n            id\n            email\n            name\n            posts {\n                id\n                author {\n                    id\n                    email\n                    name\n                    createdAt\n                }\n                title\n                content\n                createdAt\n            }\n            createdAt\n        }\n        title\n        content\n        createdAt\n    }\n}",
+								"variables": "{\n  \"id\": 0\n}"
 							}
 						},
 						"url": {
-							"raw": "{{url}}/graphql",
+							"raw": "{{url}}",
 							"host": [
 								"{{url}}"
-							],
-							"path": [
-								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query users {\n    users {\n        id\n        email\n        name\n        posts {\n            id\n            title\n            content\n            createdAt\n        }\n        createdAt\n    }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query user ($id: ID!) {\n    user (id: $id) {\n        id\n        email\n        name\n        posts [{\n            id\n            title\n            content\n            createdAt\n        }]\n        createdAt\n    }\n}",
+								"variables": "{\n  \"id\": 2\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
 							]
 						}
 					},
