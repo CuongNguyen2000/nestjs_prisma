@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Post, User } from '@prisma/client';
-import { NewPost, UpdatePost } from 'src/graphql';
+import { Post } from '@prisma/client';
+import { createPostDTO } from './dto/createPost.dto';
+import { updatePostDTO } from './dto/updatePost.dto';
 import { PostNotFoundException } from '../exceptions/postNotFound.exception';
 import { UserNotFoundException } from '../exceptions/userNotFound.exception';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
@@ -9,7 +10,7 @@ import { PrismaError } from '../utils/prismaError';
 
 @Injectable()
 export class PostsService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService) {}
 
     // Get a single post
     async post(id: string): Promise<Post | null> {
@@ -37,12 +38,12 @@ export class PostsService {
     }
 
     // Create a post
-    async createPost(input: NewPost): Promise<Post> {
+    async createPost(input: createPostDTO): Promise<Post> {
         const userExist = await this.prisma.user.findUnique({
             where: {
                 id: parseInt(input.author),
             },
-        })
+        });
 
         if (!userExist) throw new UserNotFoundException(parseInt(input.author));
 
@@ -52,8 +53,8 @@ export class PostsService {
                 author: {
                     connect: {
                         id: userExist.id,
-                    }
-                }
+                    },
+                },
             },
             include: {
                 author: true, // Return all fields
@@ -63,7 +64,7 @@ export class PostsService {
     }
 
     // Update a post
-    async updatePost(params: UpdatePost): Promise<Post> {
+    async updatePost(params: updatePostDTO): Promise<Post> {
         const { id, title, content } = params;
         try {
             const updatePost = await this.prisma.post.update({
@@ -74,7 +75,11 @@ export class PostsService {
                     ...(title && { title }),
                     ...(content && { content }),
                 },
+                include: {
+                    author: true, // Return all fields
+                },
             });
+
             return updatePost;
         } catch (error) {
             if (
@@ -103,6 +108,9 @@ export class PostsService {
             const deletePost = await this.prisma.post.delete({
                 where: {
                     id: parseInt(id),
+                },
+                include: {
+                    author: true, // Return all fields
                 },
             });
             return deletePost;

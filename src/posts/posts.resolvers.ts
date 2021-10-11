@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { PostsService } from './posts.service';
-import { NewPost, UpdatePost } from 'src/graphql';
-import { User } from '@prisma/client';
+import { createPostDTO } from './dto/createPost.dto';
+import { updatePostDTO } from './dto/updatePost.dto';
 
 @Resolver('Post')
 export class PostResolvers {
@@ -18,12 +18,12 @@ export class PostResolvers {
     }
 
     @Mutation('createPost')
-    async create(@Args('input') args: NewPost){
+    async create(@Args('input') args: createPostDTO) {
         return this.postService.createPost(args);
     }
 
     @Mutation('updatePost')
-    async update(@Args('input') args: UpdatePost) {
+    async update(@Args('input') args: updatePostDTO) {
         return this.postService.updatePost(args);
     }
 

@@ -9,7 +9,7 @@ export class PrismaService
     async onModuleInit() {
         await this.$connect();
     }
-2
+    2;
     async onModuleDestroy() {
         await this.$disconnect();
     }

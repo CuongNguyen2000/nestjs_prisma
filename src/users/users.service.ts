@@ -1,26 +1,26 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
-import { NewUser } from 'src/graphql';
+import { createUserDTO } from './dto/createUser.dto';
 import { UserNotFoundException } from '../exceptions/userNotFound.exception';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { PrismaError } from '../utils/prismaError';
 
 @Injectable()
 export class UsersService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService) {}
 
     // Create a new
-    async createUser(input: NewUser): Promise<User> {
+    async createUser(input: createUserDTO): Promise<User> {
         const user = await this.prisma.user.findUnique({
             where: {
                 email: input.email,
             },
         });
 
-        if (user) {
-            throw new HttpException('User is already exist', HttpStatus.BAD_REQUEST)
-        }
+        if (user)
+            throw new HttpException(
+                'User is already exist',
+                HttpStatus.BAD_REQUEST,
+            );
 
         const newUser = await this.prisma.user.create({
             data: input,
@@ -47,7 +47,6 @@ export class UsersService {
         return user;
     }
 
-
     // Get multiple users
     async users(): Promise<User[] | null> {
         return this.prisma.user.findMany({
@@ -59,7 +58,6 @@ export class UsersService {
 
     // delete an user
     async deleteUser(id: string): Promise<User> {
-
         const user = await this.prisma.user.findUnique({
             where: {
                 id: parseInt(id),
@@ -81,11 +79,10 @@ export class UsersService {
             where: {
                 authorId: parseInt(id),
             },
-        })
-        
-        await this.prisma.$transaction([deletePosts, deleteUser])
+        });
+
+        await this.prisma.$transaction([deletePosts, deleteUser]);
 
         return user;
-
     }
 }
