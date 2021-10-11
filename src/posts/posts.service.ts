@@ -1,20 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Post } from '@prisma/client';
+import { Post, User } from '@prisma/client';
 import { NewPost, UpdatePost } from 'src/graphql';
 import { PostNotFoundException } from '../exceptions/postNotFound.exception';
+import { UserNotFoundException } from '../exceptions/userNotFound.exception';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaError } from '../utils/prismaError';
 
 @Injectable()
 export class PostsService {
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService) { }
 
     // Get a single post
     async post(id: string): Promise<Post | null> {
         const post = await this.prisma.post.findUnique({
             where: {
                 id: parseInt(id),
+            },
+            include: {
+                author: true, // Return all fields
             },
         });
 
@@ -25,13 +29,35 @@ export class PostsService {
 
     // Get multiple posts
     async posts(): Promise<Post[]> {
-        return this.prisma.post.findMany({});
+        return this.prisma.post.findMany({
+            include: {
+                author: true, // Return all fields
+            },
+        });
     }
 
     // Create a post
     async createPost(input: NewPost): Promise<Post> {
+        const userExist = await this.prisma.user.findUnique({
+            where: {
+                id: parseInt(input.author),
+            },
+        })
+
+        if (!userExist) throw new UserNotFoundException(parseInt(input.author));
+
         const newPost = await this.prisma.post.create({
-            data: input,
+            data: {
+                ...input,
+                author: {
+                    connect: {
+                        id: userExist.id,
+                    }
+                }
+            },
+            include: {
+                author: true, // Return all fields
+            },
         });
         return newPost;
     }
