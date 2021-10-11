@@ -30,9 +30,10 @@ export class PostsService {
 
     // Create a post
     async createPost(input: NewPost): Promise<Post> {
-        return this.prisma.post.create({
+        const newPost = await this.prisma.post.create({
             data: input,
         });
+        return newPost;
     }
 
     // Update a post
